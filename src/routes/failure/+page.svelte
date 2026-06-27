@@ -35,8 +35,8 @@
 	</div>
 
 	<div class="failure__foot">
-		<Button label="Close" on:click={onClose} />
-		<Button label="Retry" primary on:click={onRetry} />
+		<Button label="Close" onclick={onClose} />
+		<Button label="Retry" primary onclick={onRetry} />
 	</div>
 </div>
 

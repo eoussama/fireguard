@@ -9,7 +9,7 @@
 	 * @description
 	 * The status of the authentication.
 	 */
-	export let status: AuthStatus;
+	let { status }: { status: AuthStatus } = $props();
 
 	/**
 	 * @description

@@ -1,5 +1,11 @@
 allowBuilds:
-  '@parcel/watcher': set this to true or false
-  esbuild: set this to true or false
-  protobufjs: set this to true or false
-  svelte-preprocess: set this to true or false
+  '@parcel/watcher': true
+  esbuild: true
+  protobufjs: true
+  svelte-preprocess: true
+
+overrides:
+  undici: '>=6.27.0'
+  minimatch: '>=9.0.7'
+  cookie: '>=0.7.0 <2.0.0'
+  vite: '>=6.4.3'

@@ -25,7 +25,7 @@
 	 * @description
 	 * Human readable remaining time
 	 */
-	$: remainingTime = `${iterations} second${iterations === 1 ? '' : 's'}`;
+	let remainingTime = $derived(`${iterations} second${iterations === 1 ? '' : 's'}`);
 
 	/**
 	 * @description
@@ -60,7 +60,7 @@
 	</div>
 
 	<div class="success__foot">
-		<Button label="Close" on:click={onClose} />
+		<Button label="Close" onclick={onClose} />
 	</div>
 </div>
 

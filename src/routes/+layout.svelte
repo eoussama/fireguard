@@ -1,6 +1,10 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
+
 	import '../theme/main.scss';
 	import Foot from '$lib/components/foot.svelte';
+
+	let { children }: { children: Snippet } = $props();
 </script>
 
 <svelte:head>
@@ -9,7 +13,7 @@
 
 <div class="root">
 	<main class="body">
-		<slot />
+		{@render children()}
 	</main>
 
 	<footer class="foot">

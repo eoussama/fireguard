@@ -1,34 +1,32 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import type { MouseEventHandler } from 'svelte/elements';
 
 	/**
 	 * @description
 	 * If the button is primary
 	 */
-	export let primary: boolean = false;
 
 	/**
 	 * @description
 	 * The label of the button
 	 */
-	export let label: string = 'Click Me!';
 
 	/**
 	 * @description
-	 * Event dispatcher
+	 * Click handler callback
 	 */
-	const dispatch = createEventDispatcher();
-
-	/**
-	 * @description
-	 * Button click event
-	 *
-	 * @param e Event object
-	 */
-	const onClick = (e: MouseEvent) => dispatch('click', { e });
+	let {
+		primary = false,
+		label = 'Click Me!',
+		onclick
+	}: {
+		primary?: boolean;
+		label?: string;
+		onclick?: MouseEventHandler<HTMLButtonElement>;
+	} = $props();
 </script>
 
-<button class="btn" class:btn--primary={primary} on:click={onClick}>{label}</button>
+<button class="btn" class:btn--primary={primary} {onclick}>{label}</button>
 
 <style lang="scss">
 	.btn {
