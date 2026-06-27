@@ -3,7 +3,7 @@
 
   import Head from "$lib/components/head.svelte";
   import Loader from "$lib/components/loader.svelte";
-  
+
   import { AuthStatus } from "$lib/core/enums/auth-status.enum";
   import { Page } from "$lib/core/enums/page.enum";
   import { AuthHelper } from "$lib/core/helpers/auth.helper";
@@ -58,7 +58,13 @@
             }
           }
           catch (err) {
-            const error = err as BaseError;
+            const error = err as BaseError & { code?: string };
+
+            if (error.code === "auth/popup-closed-by-user") {
+              FireguardHelper.close();
+
+              return;
+            }
 
             onFailure(error.message);
             EventHelper.send(EventType.AuthFailed, { error: error.toObject() });
