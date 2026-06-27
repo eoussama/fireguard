@@ -63,8 +63,13 @@
 		justify-content: center;
 
 		&__icon {
-			width: 70px;
+			width: 80px;
+			height: 80px;
+			padding: 8px;
 			margin: 0 10px;
+
+			border-radius: 50%;
+			background-color: rgba(var(--color-primary-rgb), 0.4);
 
 			img {
 				width: 100%;
