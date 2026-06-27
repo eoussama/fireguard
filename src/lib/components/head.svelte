@@ -16,7 +16,7 @@
    * @description
    * The name of the current auth status.
    */
-  const statusName = $derived(EnumHelper.getName(AuthStatus, status).toLowerCase());
+  const statusName = $derived((EnumHelper.getName(AuthStatus, status) ?? "").toLowerCase());
 
   /**
    * @description
