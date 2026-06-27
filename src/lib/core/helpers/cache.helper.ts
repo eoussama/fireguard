@@ -1,4 +1,4 @@
-import type { TNullable } from "@eoussama/firemitt";
+import type { TNullable } from "@eoussama/core";
 
 
 

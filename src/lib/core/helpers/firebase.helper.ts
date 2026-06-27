@@ -1,4 +1,5 @@
-import type { TFirebaseConfig, TNullable } from "@eoussama/firemitt";
+import type { TNullable } from "@eoussama/core";
+import type { TFirebaseConfig } from "@eoussama/firemitt";
 import type { FirebaseApp, FirebaseOptions } from "firebase/app";
 
 import type { Auth, AuthProvider } from "firebase/auth";

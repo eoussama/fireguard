@@ -1,4 +1,5 @@
-import type { TFireguardConfig, TNullable } from "@eoussama/firemitt";
+import type { TNullable } from "@eoussama/core";
+import type { TFireguardConfig } from "@eoussama/firemitt";
 
 
 
