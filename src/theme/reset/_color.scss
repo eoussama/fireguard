@@ -1,19 +1,8 @@
 @use '../vars/color';
+@use '../utils/color' as colorUtils;
 
 :root {
-	--color-primary: #{color.$color-primary};
-	--color-primary-rgb: #{color.$color-primary-rgb};
-	--color-primary-hsl: #{color.$color-primary-hsl};
-
-	--color-secondary: #{color.$color-secondary};
-	--color-secondary-rgb: #{color.$color-secondary-rgb};
-	--color-secondary-hsl: #{color.$color-secondary-hsl};
-
-	--color-text: #{color.$color-text};
-	--color-text-rgb: #{color.$color-text-rgb};
-	--color-text-hsl: #{color.$color-text-hsl};
-
-	--color-error: #{color.$color-error};
-	--color-error-rgb: #{color.$color-error-rgb};
-	--color-error-hsl: #{color.$color-error-hsl};
+	@each $name, $value in color.$colors {
+		@include colorUtils.defineColorVars($name, $value);
+	}
 }

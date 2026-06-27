@@ -1,140 +1,139 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
+  import { AuthStatus } from "$lib/core/enums/auth-status.enum";
+  import { appStore } from "$lib/core/stores/app.store";
+  import { EnumHelper } from "@eoussama/firemitt";
+  import { fly } from "svelte/transition";
 
-	import { appStore } from '$lib/core/stores/app.store';
-	import { AuthStatus } from '$lib/core/enums/auth-status.enum';
-	import { EnumHelper } from '@eoussama/firemitt';
 
-	/**
-	 * @description
-	 * The status of the authentication.
-	 */
-	let { status }: { status: AuthStatus } = $props();
 
-	/**
-	 * @description
-	 * Returns the appropriate status icon.
-	 */
-	const getLoaderIcon = (): string => {
-		const base = 'images';
-		const iconName = EnumHelper.getName(AuthStatus, status);
+  /**
+   * @description
+   * The status of the authentication.
+   */
+  const { status }: { status: AuthStatus } = $props();
 
-		return `${base}/${iconName}.svg`.toLowerCase();
-	};
+  /**
+   * @description
+   * The name of the current auth status.
+   */
+  const statusName = $derived(EnumHelper.getName(AuthStatus, status).toLowerCase());
 
-	/**
-	 * @description
-	 * Returns the appropriate classes for the icon element.
-	 */
-	const getLoaderClass = (): string => {
-		const classes = [
-			'head__icon',
-			'head__icon--loader',
-			`head__icon--${EnumHelper.getName(AuthStatus, status)}`
-		];
+  /**
+   * @description
+   * Returns the appropriate status icon.
+   *
+   * @returns The icon path for the current status.
+   */
+  const getLoaderIcon = (): string => `images/${statusName}.svg`;
 
-		return classes.join(' ').toLowerCase();
-	};
+  /**
+   * @description
+   * Returns the appropriate classes for the icon element.
+   *
+   * @returns The CSS class string for the loader icon.
+   */
+  const getLoaderClass = (): string =>
+    ["head__icon", "head__icon--loader", `head__icon--${statusName}`].join(" ");
 </script>
 
 <div class="head">
-	{#if $appStore.config?.logo}
-		<div class="head__icon" transition:fly>
-			<img alt="App Icon" src={$appStore.config.logo} />
-		</div>
+  {#if $appStore.config?.logo}
+    <div class="head__icon" transition:fly>
+      <img alt="App Icon" src={$appStore.config.logo} />
+    </div>
 
-		<div class={getLoaderClass()} transition:fly>
-			<div class="loader"></div>
-			<img alt="Status icon" src={getLoaderIcon()} />
-		</div>
-	{/if}
+    <div class={getLoaderClass()} transition:fly>
+      <div class="loader"></div>
+      <img alt="Status icon" src={getLoaderIcon()} />
+    </div>
+  {/if}
 
-	<div class="head__icon">
-		<img alt="Fireguard Icon" src="./images/logo.svg" />
-	</div>
+  <div class="head__icon">
+    <img alt="Fireguard Icon" src="./images/logo.svg" />
+  </div>
 </div>
 
 <style lang="scss">
-	.head {
-		display: flex;
-		flex-direction: row;
+  .head {
+    display: flex;
+    flex-direction: row;
 
-		align-items: center;
-		justify-content: center;
+    align-items: center;
+    justify-content: center;
 
-		&__icon {
-			width: 80px;
-			height: 80px;
-			padding: 8px;
-			margin: 0 10px;
+    &__icon {
+      width: 80px;
+      height: 80px;
+      padding: 8px;
+      margin: 0 10px;
 
-			border-radius: 50%;
-			background-color: rgba(var(--color-primary-rgb), 0.4);
+      border-radius: 50%;
+      background-color: rgba(var(--color-primary-rgb), 0.4);
 
-			img {
-				width: 100%;
-			}
+      img {
+        width: 100%;
+      }
 
-			&--loader {
-				width: 35px;
-				position: relative;
+      &--loader {
+        width: 35px;
+        position: relative;
 
-				.loader {
-					display: none;
+        .loader {
+          display: none;
 
-					position: absolute;
-					top: -3px;
-					left: -2px;
+          position: absolute;
+          top: -3px;
+          left: -2px;
 
-					width: 40px;
-					padding: 4px;
+          width: 40px;
+          padding: 4px;
 
-					aspect-ratio: 1;
+          aspect-ratio: 1;
 
-					border-radius: 50%;
-					background: var(--color-secondary);
+          border-radius: 50%;
+          background: var(--color-secondary);
 
-					--_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
-					mask: var(--_m);
+          --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+          mask: var(--_m);
 
-					-webkit-mask: var(--_m);
-					-webkit-mask-composite: source-out;
+          -webkit-mask: var(--_m);
+          -webkit-mask-composite: source-out;
 
-					mask-composite: subtract;
-					animation: load 1s infinite linear;
+          mask-composite: subtract;
+          animation: load 1s infinite linear;
 
-					@keyframes load {
-						to {
-							transform: rotate(1turn);
-						}
-					}
-				}
-			}
+          @keyframes load {
+            to {
+              transform: rotate(1turn);
+            }
+          }
+        }
+      }
 
-			&--pending {
-				img {
-					animation-name: beat;
-					animation-duration: 1s;
-					animation-fill-mode: both;
-					animation-direction: alternate;
-					animation-iteration-count: infinite;
-					animation-timing-function: ease-in-out;
+      &--pending {
+        img {
+          animation-name: beat;
+          animation-duration: 1s;
+          animation-fill-mode: both;
+          animation-direction: alternate;
+          animation-iteration-count: infinite;
+          animation-timing-function: ease-in-out;
 
-					@keyframes beat {
-						from {
-							opacity: 0.3;
-						}
+          @keyframes beat {
+            from {
+              opacity: 0.3;
+            }
 
-						to {
-							opacity: 1;
-						}
-					}
-				}
+            to {
+              opacity: 1;
+            }
+          }
+        }
 
-				.loader {
-					display: block;
-				}
-			}
-		}
-	}
+        .loader {
+          display: block;
+        }
+      }
+    }
+  }
 </style>

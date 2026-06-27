@@ -1,49 +1,49 @@
 <script lang="ts">
-	import { PUBLIC_VERSION } from '$env/static/public';
+  import { PUBLIC_VERSION } from "$env/static/public";
 </script>
 
 <div class="foot">
-	<p class="foot__note">Make sure you're not blocking popups on this page.</p>
-	<p class="foot__note">
-		Powered by <a target="_blank" href="https://github.com/EOussama/fireguard">Fireguard</a>
-		v{PUBLIC_VERSION}
-	</p>
+  <p class="foot__note">Make sure you're not blocking popups on this page.</p>
+  <p class="foot__note">
+    Powered by <a target="_blank" href="https://github.com/EOussama/fireguard">Fireguard</a>
+    v{PUBLIC_VERSION}
+  </p>
 </div>
 
 <style lang="scss">
-	.foot {
-		&__note {
-			color: grey;
-			font-size: 12px;
-		}
+  .foot {
+    &__note {
+      color: grey;
+      font-size: 12px;
+    }
 
-		a {
-			padding: 0 2px;
-			position: relative;
+    a {
+      padding: 0 2px;
+      position: relative;
 
-			text-decoration: none;
-			color: hsl(var(--color-primary-hsl), 35%);
+      text-decoration: none;
+      color: hsl(var(--color-primary-hsl), 35%);
 
-			&::before {
-				content: '';
+      &::before {
+        content: '';
 
-				top: 0;
-				left: 0;
-				position: absolute;
+        top: 0;
+        left: 0;
+        position: absolute;
 
-				width: 0;
-				height: 100%;
+        width: 0;
+        height: 100%;
 
-				border-radius: 5px;
-				background-color: rgba(var(--color-primary-rgb), 0.15);
+        border-radius: 5px;
+        background-color: rgba(var(--color-primary-rgb), 0.15);
 
-				transition-duration: 0.2s;
-				transition-property: width;
-			}
+        transition-duration: 0.2s;
+        transition-property: width;
+      }
 
-			&:hover::before {
-				width: 100%;
-			}
-		}
-	}
+      &:hover::before {
+        width: 100%;
+      }
+    }
+  }
 </style>
