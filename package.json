@@ -13,7 +13,7 @@
     "test": "vitest",
     "lint": "pnpx @eoussama/dx lint",
     "lint:fix": "pnpx @eoussama/dx lint --fix",
-    "prod": "pnpm audit && pnpm lint && pnpm check && pnpm build"
+    "prod": "pnpm audit && pnpm lint && pnpm check && pnpm build && pnpm test"
   },
   "dependencies": {
     "@eoussama/firemitt": "^0.1.5",
