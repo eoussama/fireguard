@@ -13,7 +13,7 @@
     "test": "vitest",
     "lint": "pnpx @eoussama/dx lint",
     "lint:fix": "pnpx @eoussama/dx lint --fix",
-    "format": "prettier --write ."
+    "prod": "pnpm audit && pnpm lint && pnpm check && pnpm build"
   },
   "dependencies": {
     "@eoussama/firemitt": "^0.1.5",
@@ -27,8 +27,6 @@
     "@sveltejs/kit": "^2.68.0",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@types/chroma-js": "^3.1.2",
-    "prettier": "^3.1.1",
-    "prettier-plugin-svelte": "^4.1.1",
     "sass": "^1.69.7",
     "svelte": "^5.55.7",
     "svelte-check": "^4.0.0",
