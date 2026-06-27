@@ -35,17 +35,18 @@ Fireguard is a SvelteKit-based web application designed to facilitate authentica
    ```
 
 2. **Install dependencies**:
+    ```bash
+    pnpm install
+    ```
 
-   ```bash
-   npm install
-   ```
+3. **Environment variables**: Create a `.env` file from `.env.example` and populate it with the required values.
 
-3. **Environment variables**: Creates a `.env` file from `.env.example` and populate it with the required values.
 
-4. **Run the development server**:
-   ```bash
-   npm run dev
-   ```
+4. **Run the development server**: 
+    ```bash
+    pnpm dev
+    ```
+>>>>>>> Stashed changes
 
 ### Usage
 

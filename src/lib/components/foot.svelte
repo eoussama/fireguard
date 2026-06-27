@@ -3,11 +3,11 @@
 </script>
 
 <div class="foot">
-  <p class="foot__note">Make sure you're not blocking popups on this page.</p>
-  <p class="foot__note">
-    Powered by <a target="_blank" href="https://github.com/EOussama/fireguard">Fireguard</a>
-    v{PUBLIC_VERSION}
-  </p>
+	<p class="foot__note">Make sure you're not blocking popups on this page.</p>
+	<p class="foot__note">
+		Powered by <a target="_blank" href="https://github.com/eoussama/fireguard">Fireguard</a>
+		v{PUBLIC_VERSION}
+	</p>
 </div>
 
 <style lang="scss">
