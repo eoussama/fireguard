@@ -4,7 +4,7 @@ import { FireguardHelper } from "./fireguard.helper";
 
 
 
-describe("FireguardHelper", () => {
+describe("tests FireguardHelper", () => {
   describe("isReady", () => {
     beforeEach(() => {
       vi.stubGlobal("window", { opener: null });

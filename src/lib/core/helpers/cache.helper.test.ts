@@ -1,10 +1,10 @@
-import { describe, beforeEach, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { CacheHelper } from "./cache.helper";
 
 
 
-describe("CacheHelper", () => {
+describe("tests CacheHelper", () => {
   let cache: CacheHelper<string>;
 
   beforeEach(() => {
