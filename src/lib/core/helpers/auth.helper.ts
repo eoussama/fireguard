@@ -25,11 +25,13 @@ export class AuthHelper {
     await FirebaseHelper.reset(credentials.appId);
 
     const auth = FirebaseHelper.getAuth(credentials);
+
     if (!auth) {
       throw new InvalidAppError();
     }
 
     const provider = FirebaseHelper.getProvider();
+
     if (!provider) {
       throw new InvalidProviderError("unknown");
     }
