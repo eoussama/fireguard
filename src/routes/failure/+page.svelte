@@ -3,7 +3,6 @@
   import Error from "$lib/components/error.svelte";
   import Head from "$lib/components/head.svelte";
   import { AuthStatus } from "$lib/core/enums/auth-status.enum";
-  import { Page } from "$lib/core/enums/page.enum";
   import { FireguardHelper } from "$lib/core/helpers/fireguard.helper";
 
 
@@ -21,7 +20,7 @@
    * Retry handler
    */
   const onRetry = (): void => {
-    FireguardHelper.navigate(Page.Index).then(() => location.reload());
+    window.location.href = "/";
   };
 </script>
 
