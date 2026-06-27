@@ -21,7 +21,7 @@
 	 * Retry handler
 	 */
 	const onRetry = (): void => {
-		FireguardHelper.navigate(Page.Index).then((e) => location.reload());
+		FireguardHelper.navigate(Page.Index).then(() => location.reload());
 	};
 </script>
 
@@ -35,8 +35,8 @@
 	</div>
 
 	<div class="failure__foot">
-		<Button label="Close" on:click={onClose} />
-		<Button label="Retry" primary on:click={onRetry} />
+		<Button label="Close" onclick={onClose} />
+		<Button label="Retry" primary onclick={onRetry} />
 	</div>
 </div>
 
