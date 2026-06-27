@@ -1,5 +1,5 @@
 import type { TFireguardConfig } from "@eoussama/firemitt";
-import type { Invalidator, Subscriber, Unsubscriber } from "svelte/store";
+import type { Subscriber, Unsubscriber } from "svelte/store";
 
 import type { TAppState } from "./app-state.type";
 
@@ -17,7 +17,6 @@ export type TAppStore = {
   subscribe: (
     this: void,
     run: Subscriber<TAppState>,
-    invalidate?: Invalidator<TAppState> | undefined,
   ) => Unsubscriber;
 
   /**
