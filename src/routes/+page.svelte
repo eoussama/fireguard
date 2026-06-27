@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { BaseError, TFireguardConfig } from "@eoussama/firemitt";
+  import type { BaseError, IError, TFireguardConfig } from "@eoussama/firemitt";
 
   import Head from "$lib/components/head.svelte";
   import Loader from "$lib/components/loader.svelte";
@@ -42,32 +42,71 @@
     FireguardHelper.navigate(Page.Success);
   };
 
+  /**
+   * @description
+   * Extracts a serializable error payload from an unknown thrown value.
+   *
+   * @param err - The caught error value.
+   * @returns A plain object matching IError.
+   */
+  const toErrorPayload = (err: unknown): IError => {
+    if (err && typeof err === "object" && "toObject" in err && typeof (err as BaseError).toObject === "function") {
+      return (err as BaseError).toObject();
+    }
+
+    const e = err as { name?: string; message?: string };
+
+    return { type: 0 as never, name: e?.name ?? "FirebaseAuthError", message: e?.message ?? "Authentication failed." };
+  };
+
   onMount(() => {
     if (EventHelper.init(window.opener)) {
       EventHelper.send(EventType.Loaded).on<TFireguardConfig>(
         EventType.Config,
         async (config?: TFireguardConfig) => {
-          try {
-            if (config) {
-              ConfigHelper.load(config);
-              appStore.stopLoader();
+          if (!config) {
+            return;
+          }
 
-              const token = await AuthHelper.login(config.firebase);
+          ConfigHelper.load(config);
+          appStore.stopLoader();
 
-              onSuccess(token);
+          let settled = false;
+
+          const handleFocus = (): void => {
+            if (!settled) {
+              settled = true;
+              window.removeEventListener("focus", handleFocus);
+              onFailure("The sign-in popup was closed. Please try again.");
             }
+          };
+
+          window.addEventListener("focus", handleFocus);
+
+          try {
+            const token = await AuthHelper.login(config.firebase);
+
+            settled = true;
+            window.removeEventListener("focus", handleFocus);
+
+            onSuccess(token);
           }
           catch (err) {
-            const error = err as BaseError & { code?: string };
+            settled = true;
+            window.removeEventListener("focus", handleFocus);
 
-            if (error.code === "auth/popup-closed-by-user") {
-              FireguardHelper.close();
+            const code = (err as { code?: string })?.code;
+
+            if (code === "auth/popup-closed-by-user") {
+              onFailure("The sign-in popup was closed. Please try again.");
 
               return;
             }
 
-            onFailure(error.message);
-            EventHelper.send(EventType.AuthFailed, { error: error.toObject() });
+            const message = (err as { message?: string })?.message ?? "Authentication failed.";
+
+            onFailure(message);
+            EventHelper.send(EventType.AuthFailed, { error: toErrorPayload(err) });
           }
         },
       );
