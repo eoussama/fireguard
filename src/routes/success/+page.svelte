@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/button.svelte";
   import Head from "$lib/components/head.svelte";
+  
   import { AuthStatus } from "$lib/core/enums/auth-status.enum";
   import { FireguardHelper } from "$lib/core/helpers/fireguard.helper";
   import { appStore } from "$lib/core/stores/app.store";

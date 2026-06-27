@@ -1,7 +1,9 @@
 <script lang="ts">
   import type { BaseError, TFireguardConfig } from "@eoussama/firemitt";
+
   import Head from "$lib/components/head.svelte";
   import Loader from "$lib/components/loader.svelte";
+  
   import { AuthStatus } from "$lib/core/enums/auth-status.enum";
   import { Page } from "$lib/core/enums/page.enum";
   import { AuthHelper } from "$lib/core/helpers/auth.helper";
