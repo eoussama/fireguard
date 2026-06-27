@@ -1,7 +1,5 @@
 @use '../utils/color';
 
-
-
 $color-primary: #ffe536;
 $color-primary-rgb: color.colorToRgb($color-primary);
 $color-primary-hsl: color.colorToHsl($color-primary);

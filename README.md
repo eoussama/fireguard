@@ -28,38 +28,40 @@ Fireguard is a SvelteKit-based web application designed to facilitate authentica
 ### Installation
 
 1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/eoussama/fireguard.git
-    cd fireguard
-    ```
+
+   ```bash
+   git clone https://github.com/eoussama/fireguard.git
+   cd fireguard
+   ```
 
 2. **Install dependencies**:
-    ```bash
-    npm install
-    ```
+
+   ```bash
+   npm install
+   ```
 
 3. **Environment variables**: Creates a `.env` file from `.env.example` and populate it with the required values.
 
-4. **Run the development server**: 
-    ```bash
-    npm run dev
-    ```
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
 ### Usage
 
 1. **Open Fireguard in a new window**:
-    * This can be triggered from your Chrome extension or web app.
+   - This can be triggered from your Chrome extension or web app.
 
 2. **Complete authentication**:
-    * The user will authenticate using the Fireguard authentication.
+   - The user will authenticate using the Fireguard authentication.
 
 3. **Receive the token**:
-    * Fireguard will send the authentication token back to the parent application using a message event.
+   - Fireguard will send the authentication token back to the parent application using a message event.
 
 4. **Integration with Firemitt**:
-    * Fireguard is designed to work seamlessly with [Firemitt](https://github.com/eoussama/firemitt), an npm package that simplifies communication between your host application and Fireguard.
-    * Refer to the [Firemitt documentation](https://eoussama.github.io/firemitt) for detailed integration steps.
+   - Fireguard is designed to work seamlessly with [Firemitt](https://github.com/eoussama/firemitt), an npm package that simplifies communication between your host application and Fireguard.
+   - Refer to the [Firemitt documentation](https://eoussama.github.io/firemitt) for detailed integration steps.
 
 ## Contributing
-Contributions to Fireguard are welcome. Please follow the standard fork-and-pull request workflow. Ensure that your code adheres to the project's coding standards and includes appropriate tests.
 
+Contributions to Fireguard are welcome. Please follow the standard fork-and-pull request workflow. Ensure that your code adheres to the project's coding standards and includes appropriate tests.
