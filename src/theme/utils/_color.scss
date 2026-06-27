@@ -1,7 +1,9 @@
+@use 'sass:color';
+
 @function colorToRgb($color) {
-	@return red($color), green($color), blue($color);
+	@return color.channel($color, "red", $space: rgb), color.channel($color, "green", $space: rgb), color.channel($color, "blue", $space: rgb);
 }
 
 @function colorToHsl($color) {
-	@return hue($color), saturation($color);
+	@return color.channel($color, "hue", $space: hsl), color.channel($color, "saturation", $space: hsl);
 }
