@@ -13,28 +13,22 @@
 
 	/**
 	 * @description
+	 * The name of the current auth status.
+	 */
+	const statusName = $derived(EnumHelper.getName(AuthStatus, status).toLowerCase());
+
+	/**
+	 * @description
 	 * Returns the appropriate status icon.
 	 */
-	const getLoaderIcon = (): string => {
-		const base = 'images';
-		const iconName = EnumHelper.getName(AuthStatus, status);
-
-		return `${base}/${iconName}.svg`.toLowerCase();
-	};
+	const getLoaderIcon = (): string => `images/${statusName}.svg`;
 
 	/**
 	 * @description
 	 * Returns the appropriate classes for the icon element.
 	 */
-	const getLoaderClass = (): string => {
-		const classes = [
-			'head__icon',
-			'head__icon--loader',
-			`head__icon--${EnumHelper.getName(AuthStatus, status)}`
-		];
-
-		return classes.join(' ').toLowerCase();
-	};
+	const getLoaderClass = (): string =>
+		['head__icon', 'head__icon--loader', `head__icon--${statusName}`].join(' ');
 </script>
 
 <div class="head">

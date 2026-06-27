@@ -41,26 +41,9 @@
 </div>
 
 <style lang="scss">
+	@use '../../theme/utils/layout';
+
 	.failure {
-		display: flex;
-		flex-direction: column;
-
-		align-items: center;
-		justify-content: center;
-
-		margin-bottom: 20px;
-
-		&__head {
-			margin-top: 20px;
-		}
-
-		&__body {
-			margin-top: 10px;
-			text-align: center;
-		}
-
-		&__foot {
-			margin-top: 15px;
-		}
+		@include layout.pageLayout;
 	}
 </style>

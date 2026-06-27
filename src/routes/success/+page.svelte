@@ -65,25 +65,9 @@
 </div>
 
 <style lang="scss">
+	@use '../../theme/utils/layout';
+
 	.success {
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		justify-content: center;
-
-		margin-bottom: 20px;
-
-		&__head {
-			margin-top: 20px;
-		}
-
-		&__body {
-			margin-top: 10px;
-			text-align: center;
-		}
-
-		&__foot {
-			margin-top: 15px;
-		}
+		@include layout.pageLayout;
 	}
 </style>

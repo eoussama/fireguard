@@ -7,3 +7,9 @@
 @function colorToHsl($color) {
 	@return color.channel($color, "hue", $space: hsl), color.channel($color, "saturation", $space: hsl);
 }
+
+@mixin defineColorVars($name, $value) {
+	--color-#{$name}: #{$value};
+	--color-#{$name}-rgb: #{colorToRgb($value)};
+	--color-#{$name}-hsl: #{colorToHsl($value)};
+}
