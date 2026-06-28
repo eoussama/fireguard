@@ -80,7 +80,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        
+
         width: 35px;
         position: relative;
 

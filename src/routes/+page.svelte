@@ -60,7 +60,9 @@
   };
 
   onMount(() => {
-    if (EventHelper.init(window.opener)) {
+    const host = FireguardHelper.getHost();
+
+    if (host && EventHelper.init(host)) {
       EventHelper.send(EventType.Loaded).on<TFireguardConfig>(
         EventType.Config,
         async (config?: TFireguardConfig) => {
