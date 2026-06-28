@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@eoussama/core": "^0.0.4",
-    "@eoussama/firemitt": "^0.1.5",
+    "@eoussama/firemitt": "^0.1.6",
     "chroma-js": "^3.2.0",
     "firebase": "^12.15.0"
   },
