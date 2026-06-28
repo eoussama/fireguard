@@ -84,7 +84,7 @@
           window.addEventListener("focus", handleFocus);
 
           try {
-            const token = await AuthHelper.login(config.firebase);
+            const token = await AuthHelper.login(config.firebase, config.provider);
 
             settled = true;
             window.removeEventListener("focus", handleFocus);
@@ -129,7 +129,7 @@
       </div>
     {:else}
       <div class="content__message" in:fly={{ y: 5, duration: 1000 }}>
-        <p>Google Authentication for <b>{$appStore.config?.name}</b>...</p>
+        <p>Authentication for <b>{$appStore.config?.name}</b>...</p>
       </div>
     {/if}
   </div>
