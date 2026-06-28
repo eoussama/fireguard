@@ -39,7 +39,7 @@ export class ConfigHelper {
    * @param config The configuration settings to load.
    */
   static load(config: TFireguardConfig): void {
-    const colors: Array<TColor> = ["primary", "secondary", "text"];
+    const colors: Array<TColor> = ["primary", "secondary", "text", "background"];
 
     colors.forEach(color => this.loadColor(color, config.theme[color]));
     appStore.loadConfig(config);
