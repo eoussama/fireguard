@@ -38,7 +38,7 @@
 
 <div class="head">
   {#if $appStore.config?.logo}
-    <div class="head__icon" transition:fly>
+    <div class="head__icon head__icon--config" transition:fly>
       <img alt="App Icon" src={$appStore.config.logo} />
     </div>
 
@@ -64,15 +64,22 @@
     &__icon {
       width: 80px;
       height: 80px;
-      padding: 8px;
+      padding: 4px;
       margin: 0 10px;
 
       img {
         width: 100%;
       }
 
+      &--config {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
       &--fireguard {
         border-radius: 50%;
+        margin-inline: 20px;
         background-color: rgba(var(--color-primary-rgb), 0.4);
       }
 
