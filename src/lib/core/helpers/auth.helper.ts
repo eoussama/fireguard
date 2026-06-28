@@ -17,11 +17,12 @@ export class AuthHelper {
    * Logs in the user using Firebase authentication.
    *
    * @param credentials The Firebase configuration.
+   * @param provider The authentication provider identifier. Defaults to "google".
    * @returns A promise resolving to the authentication token.
    * @throws {InvalidAppError} If the Firebase app is invalid or not initialized.
    * @throws {InvalidProviderError} If the authentication provider is invalid or unknown.
    */
-  static async login(credentials: TFirebaseConfig): Promise<string> {
+  static async login(credentials: TFirebaseConfig, provider: string = "google"): Promise<string> {
     await FirebaseHelper.reset(credentials.appId);
 
     const auth = FirebaseHelper.getAuth(credentials);
@@ -30,14 +31,15 @@ export class AuthHelper {
       throw new InvalidAppError();
     }
 
-    const provider = FirebaseHelper.getProvider();
+    const authProvider = FirebaseHelper.getProvider(provider);
 
-    if (!provider) {
+    if (!authProvider) {
       throw new InvalidProviderError("unknown");
     }
 
-    const result = await signInWithPopup(auth, provider);
-    const token = (result as unknown as TToken)._tokenResponse.oauthIdToken ?? "";
+    const result = await signInWithPopup(auth, authProvider);
+    const tokenResponse = (result as unknown as TToken)._tokenResponse;
+    const token = tokenResponse.oauthIdToken ?? tokenResponse.oauthAccessToken ?? "";
 
     return token;
   }

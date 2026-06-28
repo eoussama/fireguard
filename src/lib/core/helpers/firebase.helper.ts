@@ -1,11 +1,19 @@
 import type { TNullable } from "@eoussama/core";
 import type { TFirebaseConfig } from "@eoussama/firemitt";
 import type { FirebaseApp, FirebaseOptions } from "firebase/app";
-
 import type { Auth, AuthProvider } from "firebase/auth";
-import { InvalidAppError } from "@eoussama/firemitt";
+
+import { EProvider, InvalidAppError } from "@eoussama/firemitt";
 import { deleteApp, initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import {
+  FacebookAuthProvider,
+  getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
+  OAuthProvider,
+  SAMLAuthProvider,
+  TwitterAuthProvider,
+} from "firebase/auth";
 
 import { CacheHelper } from "./cache.helper";
 
@@ -93,15 +101,47 @@ export class FirebaseHelper {
 
   /**
    * @description
-   * Retrieves a GoogleAuthProvider instance with custom parameters.
+   * Builds a Firebase AuthProvider from a provider identifier string.
+   * Supports all Firebase popup-compatible OAuth providers.
+   * Pass a custom "oidc.<id>" or "saml.<id>" string for enterprise providers.
    *
-   * @returns The GoogleAuthProvider instance.
+   * @param providerId The provider identifier. Defaults to "google".
+   * @returns The AuthProvider instance for the given provider.
    */
-  static getProvider(): AuthProvider {
-    const provider = new GoogleAuthProvider();
+  static getProvider(providerId: string = EProvider.GOOGLE): AuthProvider {
+    if (providerId.startsWith("saml.")) {
+      return new SAMLAuthProvider(providerId);
+    }
 
-    provider.setCustomParameters({ prompt: "select_account" });
+    if (providerId.startsWith("oidc.") || providerId === EProvider.MICROSOFT) {
+      const oidcId = providerId === EProvider.MICROSOFT ? "microsoft.com" : providerId;
 
-    return provider;
+      return new OAuthProvider(oidcId);
+    }
+
+    switch (providerId) {
+      case EProvider.GITHUB:
+        return new GithubAuthProvider();
+
+      case EProvider.FACEBOOK:
+        return new FacebookAuthProvider();
+
+      case EProvider.TWITTER:
+        return new TwitterAuthProvider();
+
+      case EProvider.APPLE:
+        return new OAuthProvider("apple.com");
+
+      case EProvider.YAHOO:
+        return new OAuthProvider("yahoo.com");
+
+      default: {
+        const google = new GoogleAuthProvider();
+
+        google.setCustomParameters({ prompt: "select_account" });
+
+        return google;
+      }
+    }
   }
 }
