@@ -16,7 +16,7 @@
    * @description
    * The name of the current auth status.
    */
-  const statusName = $derived(("Pending").toLowerCase());
+  const statusName = $derived((EnumHelper.getName(AuthStatus, status) ?? "").toLowerCase());
 
   /**
    * @description
@@ -37,16 +37,16 @@
 </script>
 
 <div class="head">
-  <!-- {#if $appStore.config?.logo} -->
+  {#if $appStore.config?.logo}
     <div class="head__icon" transition:fly>
-      <img alt="App Icon" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F12%2F11%2F11%2F43%2Fgoogle-1088004_1280.png&f=1&nofb=1&ipt=86398e263a6510f427f5c3517bbb45b11fb2a3948daf3b8842987e231495f842" />
+      <img alt="App Icon" src={$appStore.config.logo} />
     </div>
 
     <div class={getLoaderClass()} transition:fly>
       <div class="loader"></div>
       <img alt="Status icon" src={getLoaderIcon()} />
     </div>
-  <!-- {/if} -->
+  {/if}
 
   <div class="head__icon head__icon--fireguard">
     <img alt="Fireguard Icon" src="./images/logo.svg" />
@@ -77,9 +77,16 @@
       }
 
       &--loader {
-        width: 35px;
         display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        width: 35px;
         position: relative;
+
+        img {
+          max-width: 35px;
+        }
 
         .loader {
           display: none;
