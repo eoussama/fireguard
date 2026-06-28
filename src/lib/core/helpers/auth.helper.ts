@@ -21,27 +21,24 @@ export class AuthHelper {
    * @throws {InvalidAppError} If the Firebase app is invalid or not initialized.
    * @throws {InvalidProviderError} If the authentication provider is invalid or unknown.
    */
-  static login(credentials: TFirebaseConfig): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const auth = FirebaseHelper.getAuth(credentials);
+  static async login(credentials: TFirebaseConfig): Promise<string> {
+    await FirebaseHelper.reset(credentials.appId);
 
-      if (!auth) {
-        throw new InvalidAppError();
-      }
+    const auth = FirebaseHelper.getAuth(credentials);
 
-      const provider = FirebaseHelper.getProvider();
+    if (!auth) {
+      throw new InvalidAppError();
+    }
 
-      if (!provider) {
-        throw new InvalidProviderError("unknown");
-      }
+    const provider = FirebaseHelper.getProvider();
 
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const token = (result as unknown as TToken)._tokenResponse.oauthIdToken ?? "";
+    if (!provider) {
+      throw new InvalidProviderError("unknown");
+    }
 
-          resolve(token);
-        })
-        .catch(reject);
-    });
+    const result = await signInWithPopup(auth, provider);
+    const token = (result as unknown as TToken)._tokenResponse.oauthIdToken ?? "";
+
+    return token;
   }
 }

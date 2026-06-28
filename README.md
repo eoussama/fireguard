@@ -42,7 +42,7 @@ Fireguard is a SvelteKit-based web application designed to facilitate authentica
 3. **Environment variables**: Create a `.env` file from `.env.example` and populate it with the required values.
 
 
-4. **Run the development server**: 
+4. **Run the development server**:
     ```bash
     pnpm dev
     ```

@@ -4,7 +4,7 @@ import type { FirebaseApp, FirebaseOptions } from "firebase/app";
 
 import type { Auth, AuthProvider } from "firebase/auth";
 import { InvalidAppError } from "@eoussama/firemitt";
-import { initializeApp } from "firebase/app";
+import { deleteApp, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 import { CacheHelper } from "./cache.helper";
@@ -43,6 +43,25 @@ export class FirebaseHelper {
     }
 
     return this.apps.get(credentials.appId);
+  }
+
+  /**
+   * @description
+   * Deletes the Firebase app instance and clears the cache for the given app ID.
+   * Call this before retrying sign-in to ensure no stale auth state carries over.
+   *
+   * @param appId The Firebase app ID to reset.
+   * @returns A promise that resolves when the app has been deleted and cache cleared.
+   */
+  static async reset(appId: string): Promise<void> {
+    const app = this.apps.get(appId);
+
+    if (app) {
+      await deleteApp(app).catch(() => {});
+    }
+
+    this.apps.delete(appId);
+    this.auths.delete(appId);
   }
 
   /**

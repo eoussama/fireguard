@@ -3,8 +3,8 @@
   import Error from "$lib/components/error.svelte";
   import Head from "$lib/components/head.svelte";
   import { AuthStatus } from "$lib/core/enums/auth-status.enum";
-  import { Page } from "$lib/core/enums/page.enum";
   import { FireguardHelper } from "$lib/core/helpers/fireguard.helper";
+  import { EventHelper, EventType } from "@eoussama/firemitt";
 
 
 
@@ -13,6 +13,7 @@
    * Closing handler
    */
   const onClose = (): void => {
+    EventHelper.send(EventType.Closed);
     FireguardHelper.close();
   };
 
@@ -21,7 +22,8 @@
    * Retry handler
    */
   const onRetry = (): void => {
-    FireguardHelper.navigate(Page.Index).then(() => location.reload());
+    EventHelper.send(EventType.Retry);
+    window.location.href = "/";
   };
 </script>
 
