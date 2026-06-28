@@ -48,7 +48,7 @@
     </div>
   {/if}
 
-  <div class="head__icon">
+  <div class="head__icon head__icon--fireguard">
     <img alt="Fireguard Icon" src="./images/logo.svg" />
   </div>
 </div>
@@ -67,25 +67,34 @@
       padding: 8px;
       margin: 0 10px;
 
-      border-radius: 50%;
-      background-color: rgba(var(--color-primary-rgb), 0.4);
-
       img {
         width: 100%;
       }
 
+      &--fireguard {
+        border-radius: 50%;
+        background-color: rgba(var(--color-primary-rgb), 0.4);
+      }
+
       &--loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
         width: 35px;
         position: relative;
 
+        img {
+          max-width: 35px;
+        }
+
         .loader {
           display: none;
-
-          position: absolute;
-          top: -3px;
-          left: -2px;
+          align-items: center;
+          justify-content: center;
 
           width: 40px;
+          height: 40px;
           padding: 4px;
 
           aspect-ratio: 1;
@@ -112,6 +121,12 @@
 
       &--pending {
         img {
+          position: absolute;
+          top: 50%;
+          left: 0;
+
+          transform: translateY(-50%);
+
           animation-name: beat;
           animation-duration: 1s;
           animation-fill-mode: both;
@@ -131,7 +146,7 @@
         }
 
         .loader {
-          display: block;
+          display: flex;
         }
       }
     }
