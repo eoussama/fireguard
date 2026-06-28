@@ -60,7 +60,9 @@
   };
 
   onMount(() => {
-    if (EventHelper.init(window.opener)) {
+    const host = FireguardHelper.getHost();
+
+    if (host && EventHelper.init(host)) {
       EventHelper.send(EventType.Loaded).on<TFireguardConfig>(
         EventType.Config,
         async (config?: TFireguardConfig) => {
@@ -72,28 +74,62 @@
           appStore.stopLoader();
 
           let settled = false;
+          let authPopup: Window | null = null;
+          let popupPoller: ReturnType<typeof setInterval> | null = null;
 
           const handleFocus = (): void => {
             if (!settled) {
               settled = true;
               window.removeEventListener("focus", handleFocus);
+
+              if (popupPoller !== null) {
+                clearInterval(popupPoller);
+                popupPoller = null;
+              }
+
               onFailure("The sign-in popup was closed. Please try again.");
+            }
+          };
+
+          const settle = (): void => {
+            window.removeEventListener("focus", handleFocus);
+
+            if (popupPoller !== null) {
+              clearInterval(popupPoller);
+              popupPoller = null;
             }
           };
 
           window.addEventListener("focus", handleFocus);
 
+          const originalOpen = window.open.bind(window);
+
+          window.open = (...args: Parameters<typeof window.open>) => {
+            authPopup = originalOpen(...args);
+            window.open = originalOpen;
+
+            popupPoller = setInterval(() => {
+              if (authPopup && authPopup.closed) {
+                handleFocus();
+              }
+            }, 200);
+
+            return authPopup;
+          };
+
           try {
             const token = await AuthHelper.login(config.firebase, config.provider);
 
             settled = true;
-            window.removeEventListener("focus", handleFocus);
+            window.open = originalOpen;
+            settle();
 
             onSuccess(token);
           }
           catch (err) {
             settled = true;
-            window.removeEventListener("focus", handleFocus);
+            window.open = originalOpen;
+            settle();
 
             const code = (err as { code?: string })?.code;
 
