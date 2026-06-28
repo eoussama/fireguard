@@ -16,7 +16,7 @@
    * @description
    * The name of the current auth status.
    */
-  const statusName = $derived((EnumHelper.getName(AuthStatus, status) ?? "").toLowerCase());
+  const statusName = $derived(("Pending").toLowerCase());
 
   /**
    * @description
@@ -37,18 +37,18 @@
 </script>
 
 <div class="head">
-  {#if $appStore.config?.logo}
+  <!-- {#if $appStore.config?.logo} -->
     <div class="head__icon" transition:fly>
-      <img alt="App Icon" src={$appStore.config.logo} />
+      <img alt="App Icon" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F12%2F11%2F11%2F43%2Fgoogle-1088004_1280.png&f=1&nofb=1&ipt=86398e263a6510f427f5c3517bbb45b11fb2a3948daf3b8842987e231495f842" />
     </div>
 
     <div class={getLoaderClass()} transition:fly>
       <div class="loader"></div>
       <img alt="Status icon" src={getLoaderIcon()} />
     </div>
-  {/if}
+  <!-- {/if} -->
 
-  <div class="head__icon">
+  <div class="head__icon head__icon--fireguard">
     <img alt="Fireguard Icon" src="./images/logo.svg" />
   </div>
 </div>
@@ -67,25 +67,27 @@
       padding: 8px;
       margin: 0 10px;
 
-      border-radius: 50%;
-      background-color: rgba(var(--color-primary-rgb), 0.4);
-
       img {
         width: 100%;
       }
 
+      &--fireguard {
+        border-radius: 50%;
+        background-color: rgba(var(--color-primary-rgb), 0.4);
+      }
+
       &--loader {
         width: 35px;
+        display: flex;
         position: relative;
 
         .loader {
           display: none;
-
-          position: absolute;
-          top: -3px;
-          left: -2px;
+          align-items: center;
+          justify-content: center;
 
           width: 40px;
+          height: 40px;
           padding: 4px;
 
           aspect-ratio: 1;
@@ -112,6 +114,12 @@
 
       &--pending {
         img {
+          position: absolute;
+          top: 50%;
+          left: 0;
+
+          transform: translateY(-50%);
+
           animation-name: beat;
           animation-duration: 1s;
           animation-fill-mode: both;
@@ -131,7 +139,7 @@
         }
 
         .loader {
-          display: block;
+          display: flex;
         }
       }
     }
