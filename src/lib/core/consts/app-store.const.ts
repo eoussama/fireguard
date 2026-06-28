@@ -1,4 +1,4 @@
-import type { TAppState } from '../types/app-state.type';
+import type { TAppState } from "../types/app-state.type";
 
 
 
@@ -7,7 +7,6 @@ import type { TAppState } from '../types/app-state.type';
  * Represents the initial state of the application.
  */
 export const initialAppState: TAppState = {
-
   /**
    * @description
    * The authentication token. Initialized to null.
@@ -30,5 +29,5 @@ export const initialAppState: TAppState = {
    * @description
    * Indicates whether the application is loading. Initialized to true.
    */
-  loading: true
+  loading: true,
 };

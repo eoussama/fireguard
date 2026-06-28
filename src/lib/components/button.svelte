@@ -1,60 +1,60 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+  import type { MouseEventHandler } from "svelte/elements";
 
-	/**
-	 * @description
-	 * If the button is primary
-	 */
-	export let primary: boolean = false;
 
-	/**
-	 * @description
-	 * The label of the button
-	 */
-	export let label: string = 'Click Me!';
 
-	/**
-	 * @description
-	 * Event dispatcher
-	 */
-	const dispatch = createEventDispatcher();
+  /**
+   * @description
+   * If the button is primary
+   */
 
-	/**
-	 * @description
-	 * Button click event
-	 *
-	 * @param e Event object
-	 */
-	const onClick = (e: MouseEvent) => dispatch('click', { e });
+  /**
+   * @description
+   * The label of the button
+   */
+
+  /**
+   * @description
+   * Click handler callback
+   */
+  const {
+    primary = false,
+    label = "Click Me!",
+    onclick,
+  }: {
+    primary?: boolean;
+    label?: string;
+    onclick?: MouseEventHandler<HTMLButtonElement>;
+  } = $props();
 </script>
 
-<button class="btn" class:btn--primary={primary} on:click={onClick}>{label}</button>
+<button class="btn" class:btn--primary={primary} {onclick}>{label}</button>
 
 <style lang="scss">
-	.btn {
-		cursor: pointer;
+  .btn {
+    cursor: pointer;
 
-		border: none;
-		border-radius: 5px;
-		padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
 
-		transition-duration: 0.2s;
-		transition-property: background-color;
+    transition-duration: 0.2s;
+    transition-property: background-color;
 
-		color: var(--color-text);
-		font-family: var(--font-primary);
-		background-color: rgba(var(--color-primary-rgb), 0.2);
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    background-color: rgba(var(--color-primary-rgb), 0.2);
 
-		&:hover {
-			background-color: rgba(var(--color-primary-rgb), 0.4);
-		}
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.4);
+    }
 
-		&--primary {
-			background-color: rgba(var(--color-primary-rgb), 0.4);
+    &--primary {
+      background-color: rgba(var(--color-primary-rgb), 0.4);
 
-			&:hover {
-				background-color: rgba(var(--color-primary-rgb), 0.6);
-			}
-		}
-	}
+      &:hover {
+        background-color: rgba(var(--color-primary-rgb), 0.6);
+      }
+    }
+  }
 </style>

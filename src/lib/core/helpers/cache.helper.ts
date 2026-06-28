@@ -1,4 +1,4 @@
-import type { TNullable } from '@eoussama/firemitt';
+import type { TNullable } from "@eoussama/core";
 
 
 
@@ -9,7 +9,6 @@ import type { TNullable } from '@eoussama/firemitt';
  * @template T The type of values to be cached.
  */
 export class CacheHelper<T> {
-
   /**
    * @description
    * Caching object.
@@ -30,12 +29,12 @@ export class CacheHelper<T> {
    *
    * @param key The key under which the value is stored.
    * @param value The value to be stored.
-   *
    * @returns {boolean} - Returns true if the value was successfully set, otherwise false.
    */
   set(key: string, value: T): boolean {
     if (!this.has(key)) {
       this.cache[key] = value;
+
       return true;
     }
 
@@ -47,7 +46,6 @@ export class CacheHelper<T> {
    * Retrieves a value from the cache.
    *
    * @param key The key of the value to retrieve.
-   *
    * @returns Returns the value associated with the key, or null if the key does not exist.
    */
   get(key: string): TNullable<T> {
@@ -59,7 +57,6 @@ export class CacheHelper<T> {
    * Checks if a key exists in the cache.
    *
    * @param key The key to check.
-   *
    * @returns Returns true if the key exists in the cache, otherwise false.
    */
   has(key: string): boolean {
@@ -71,12 +68,12 @@ export class CacheHelper<T> {
    * Deletes a value from the cache.
    *
    * @param key The key of the value to delete.
-   *
    * @returns Returns true if the value was successfully deleted, otherwise false.
    */
   delete(key: string): boolean {
     if (this.has(key)) {
       delete this.cache[key];
+
       return true;
     }
 

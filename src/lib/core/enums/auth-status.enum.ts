@@ -3,7 +3,6 @@
  * Enum representing the authentication status.
  */
 export enum AuthStatus {
-
   /**
    * @description
    * Pending authentication status.
@@ -21,5 +20,5 @@ export enum AuthStatus {
    * @description
    * Failed authentication status.
    */
-  Failure
+  Failure,
 }

@@ -1,8 +1,9 @@
-import { writable } from 'svelte/store';
-import { initialAppState } from '../consts/app-store.const';
+import type { TFireguardConfig } from "@eoussama/firemitt";
+import type { TAppStore } from "../types/app-store.type";
 
-import type { TFireguardConfig } from '@eoussama/firemitt';
-import type { TAppStore } from '../types/app-store.type';
+import { writable } from "svelte/store";
+
+import { initialAppState } from "../consts/app-store.const";
 
 
 
@@ -26,6 +27,6 @@ export const appStore: TAppStore = (() => {
     registerToken: (token: string) => update(state => ({ ...state, token })),
 
     clearError: () => update(state => ({ ...state, errorMsg: null })),
-    raiseError: (errorMsg: string) => update(state => ({ ...state, errorMsg }))
-  }
+    raiseError: (errorMsg: string) => update(state => ({ ...state, errorMsg })),
+  };
 })();

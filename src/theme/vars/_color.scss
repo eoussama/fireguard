@@ -1,19 +1,7 @@
-@use '../utils/color';
-
-
-
-$color-primary: #ffe536;
-$color-primary-rgb: color.colorToRgb($color-primary);
-$color-primary-hsl: color.colorToHsl($color-primary);
-
-$color-secondary: #1a3544;
-$color-secondary-rgb: color.colorToRgb($color-secondary);
-$color-secondary-hsl: color.colorToHsl($color-secondary);
-
-$color-text: #1a3544;
-$color-text-rgb: color.colorToRgb($color-text);
-$color-text-hsl: color.colorToHsl($color-text);
-
-$color-error: #ff5959;
-$color-error-rgb: color.colorToRgb($color-error);
-$color-error-hsl: color.colorToHsl($color-error);
+$colors: (
+	'primary': #ffe536,
+	'secondary': #1a3544,
+	'text': #1a3544,
+	'background': #ffffff,
+	'error': #ff5959,
+);

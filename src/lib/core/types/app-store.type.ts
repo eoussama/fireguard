@@ -1,6 +1,7 @@
-import type { TAppState } from './app-state.type';
-import type { TFireguardConfig } from '@eoussama/firemitt';
-import type { Invalidator, Subscriber, Unsubscriber } from 'svelte/store';
+import type { TFireguardConfig } from "@eoussama/firemitt";
+import type { Subscriber, Unsubscriber } from "svelte/store";
+
+import type { TAppState } from "./app-state.type";
 
 
 
@@ -9,18 +10,20 @@ import type { Invalidator, Subscriber, Unsubscriber } from 'svelte/store';
  * Represents the structure of the application store.
  */
 export type TAppStore = {
-
   /**
    * @description
    * Method to subscribe to changes in the application state.
    */
-  subscribe: (this: void, run: Subscriber<TAppState>, invalidate?: Invalidator<TAppState> | undefined) => Unsubscriber
+  subscribe: (
+    this: void,
+    run: Subscriber<TAppState>,
+  ) => Unsubscriber;
 
   /**
    * @description
    * Method to initialize the application store.
    */
-  init: () => void
+  init: () => void;
 
   /**
    * @description
@@ -28,25 +31,25 @@ export type TAppStore = {
    *
    * @param config The configuration to load.
    */
-  loadConfig: (config: TFireguardConfig) => void
+  loadConfig: (config: TFireguardConfig) => void;
 
   /**
    * @description
    * Method to stop the loader indicating loading state.
    */
-  stopLoader: () => void
+  stopLoader: () => void;
 
   /**
    * @description
    * Method to start the loader indicating loading state.
    */
-  startLoader: () => void
+  startLoader: () => void;
 
   /**
    * @description
    * Method to clear the authentication token.
    */
-  clearToken: () => void
+  clearToken: () => void;
 
   /**
    * @description
@@ -54,13 +57,13 @@ export type TAppStore = {
    *
    * @param token The token to register.
    */
-  registerToken: (token: string) => void
+  registerToken: (token: string) => void;
 
   /**
    * @description
    * Method to clear any error message.
    */
-  clearError: () => void,
+  clearError: () => void;
 
   /**
    * @description
@@ -68,5 +71,5 @@ export type TAppStore = {
    *
    * @param errorMsg The error message to raise.
    */
-  raiseError: (errorMsg: string) => void
-}
+  raiseError: (errorMsg: string) => void;
+};

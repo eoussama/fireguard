@@ -1,135 +1,161 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
+  import { AuthStatus } from "$lib/core/enums/auth-status.enum";
+  import { appStore } from "$lib/core/stores/app.store";
+  import { EnumHelper } from "@eoussama/firemitt";
+  import { fly } from "svelte/transition";
 
-	import { appStore } from '$lib/core/stores/app.store';
-	import { AuthStatus } from '$lib/core/enums/auth-status.enum';
-	import { EnumHelper } from '@eoussama/firemitt';
 
-	/**
-	 * @description
-	 * The status of the authentication.
-	 */
-	export let status: AuthStatus;
 
-	/**
-	 * @description
-	 * Returns the appropriate status icon.
-	 */
-	const getLoaderIcon = (): string => {
-		const base = 'images';
-		const iconName = EnumHelper.getName(AuthStatus, status);
+  /**
+   * @description
+   * The status of the authentication.
+   */
+  const { status }: { status: AuthStatus } = $props();
 
-		return `${base}/${iconName}.svg`.toLowerCase();
-	};
+  /**
+   * @description
+   * The name of the current auth status.
+   */
+  const statusName = $derived((EnumHelper.getName(AuthStatus, status) ?? "").toLowerCase());
 
-	/**
-	 * @description
-	 * Returns the appropriate classes for the icon element.
-	 */
-	const getLoaderClass = (): string => {
-		const classes = [
-			'head__icon',
-			'head__icon--loader',
-			`head__icon--${EnumHelper.getName(AuthStatus, status)}`
-		];
+  /**
+   * @description
+   * Returns the appropriate status icon.
+   *
+   * @returns The icon path for the current status.
+   */
+  const getLoaderIcon = (): string => `images/${statusName}.svg`;
 
-		return classes.join(' ').toLowerCase();
-	};
+  /**
+   * @description
+   * Returns the appropriate classes for the icon element.
+   *
+   * @returns The CSS class string for the loader icon.
+   */
+  const getLoaderClass = (): string =>
+    ["head__icon", "head__icon--loader", `head__icon--${statusName}`].join(" ");
 </script>
 
 <div class="head">
-	{#if $appStore.config?.logo}
-		<div class="head__icon" transition:fly>
-			<img alt="App Icon" src={$appStore.config.logo} />
-		</div>
+  {#if $appStore.config?.logo}
+    <div class="head__icon head__icon--config" transition:fly>
+      <img alt="App Icon" src={$appStore.config.logo} />
+    </div>
 
-		<div class={getLoaderClass()} transition:fly>
-			<div class="loader"></div>
-			<img alt="Status icon" src={getLoaderIcon()} />
-		</div>
-	{/if}
+    <div class={getLoaderClass()} transition:fly>
+      <div class="loader"></div>
+      <img alt="Status icon" src={getLoaderIcon()} />
+    </div>
+  {/if}
 
-	<div class="head__icon">
-		<img alt="Fireguard Icon" src="./images/logo.svg" />
-	</div>
+  <div class="head__icon head__icon--fireguard">
+    <img alt="Fireguard Icon" src="./images/logo.svg" />
+  </div>
 </div>
 
 <style lang="scss">
-	.head {
-		display: flex;
-		flex-direction: row;
+  .head {
+    display: flex;
+    flex-direction: row;
 
-		align-items: center;
-		justify-content: center;
+    align-items: center;
+    justify-content: center;
 
-		&__icon {
-			width: 70px;
-			margin: 0 10px;
+    &__icon {
+      width: 80px;
+      height: 80px;
+      padding: 4px;
+      margin: 0 10px;
 
-			img {
-				width: 100%;
-			}
+      img {
+        width: 100%;
+      }
 
-			&--loader {
-				width: 35px;
-				position: relative;
+      &--config {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-				.loader {
-					display: none;
+      &--fireguard {
+        border-radius: 50%;
+        margin-inline: 20px;
+        background-color: rgba(var(--color-primary-rgb), 0.4);
+      }
 
-					position: absolute;
-					top: -3px;
-					left: -2px;
+      &--loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-					width: 40px;
-					padding: 4px;
+        width: 35px;
+        position: relative;
 
-					aspect-ratio: 1;
+        img {
+          max-width: 35px;
+        }
 
-					border-radius: 50%;
-					background: var(--color-secondary);
+        .loader {
+          display: none;
+          align-items: center;
+          justify-content: center;
 
-					--_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
-					mask: var(--_m);
+          width: 40px;
+          height: 40px;
+          padding: 4px;
 
-					-webkit-mask: var(--_m);
-					-webkit-mask-composite: source-out;
+          aspect-ratio: 1;
 
-					mask-composite: subtract;
-					animation: load 1s infinite linear;
+          border-radius: 50%;
+          background: var(--color-secondary);
 
-					@keyframes load {
-						to {
-							transform: rotate(1turn);
-						}
-					}
-				}
-			}
+          --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+          mask: var(--_m);
 
-			&--pending {
-				img {
-					animation-name: beat;
-					animation-duration: 1s;
-					animation-fill-mode: both;
-					animation-direction: alternate;
-					animation-iteration-count: infinite;
-					animation-timing-function: ease-in-out;
+          -webkit-mask: var(--_m);
+          -webkit-mask-composite: source-out;
 
-					@keyframes beat {
-						from {
-							opacity: 0.3;
-						}
+          mask-composite: subtract;
+          animation: load 1s infinite linear;
 
-						to {
-							opacity: 1;
-						}
-					}
-				}
+          @keyframes load {
+            to {
+              transform: rotate(1turn);
+            }
+          }
+        }
+      }
 
-				.loader {
-					display: block;
-				}
-			}
-		}
-	}
+      &--pending {
+        img {
+          position: absolute;
+          top: 50%;
+          left: 0;
+
+          transform: translateY(-50%);
+
+          animation-name: beat;
+          animation-duration: 1s;
+          animation-fill-mode: both;
+          animation-direction: alternate;
+          animation-iteration-count: infinite;
+          animation-timing-function: ease-in-out;
+
+          @keyframes beat {
+            from {
+              opacity: 0.3;
+            }
+
+            to {
+              opacity: 1;
+            }
+          }
+        }
+
+        .loader {
+          display: flex;
+        }
+      }
+    }
+  }
 </style>
