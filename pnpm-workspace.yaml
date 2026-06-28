@@ -5,6 +5,9 @@ allowBuilds:
   protobufjs: true
   svelte-preprocess: true
 
+minimumReleaseAgeExclude:
+  - "@eoussama/firemitt@0.1.6"
+
 overrides:
   cookie: ">=0.7.0 <2.0.0"
   minimatch: ">=9.0.7"
