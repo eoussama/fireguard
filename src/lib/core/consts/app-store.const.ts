@@ -1,4 +1,4 @@
-import type { TAppState } from "../types/app-state.type";
+import type { TAppState } from "../types/app-state.type.ts";
 
 
 
@@ -24,6 +24,24 @@ export const initialAppState: TAppState = {
    * Error message if any. Initialized to null.
    */
   errorMsg: null,
+
+  /**
+   * @description
+   * The serialized error of the last failed attempt. Initialized to null.
+   */
+  error: null,
+
+  /**
+   * @description
+   * Whether the last failed attempt can be retried. Initialized to false.
+   */
+  retryable: false,
+
+  /**
+   * @description
+   * Whether the result was reported to the host page. Initialized to false.
+   */
+  reported: false,
 
   /**
    * @description

@@ -28,8 +28,10 @@ vite.config.ts.timestamp-*
 npm-debug.log*
 pnpm-debug.log*
 
-# Test coverage
+# Test coverage and mutation testing
 coverage/
+reports/
+.stryker-tmp/
 
 # Editors
 .vscode/

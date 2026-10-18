@@ -1,23 +1,39 @@
-import type { TNullable } from "@eoussama/core";
+import type { TUnsafe } from "@eoussama/core";
 import type { TFirebaseConfig } from "@eoussama/firemitt";
 import type { FirebaseApp, FirebaseOptions } from "firebase/app";
 import type { Auth, AuthProvider } from "firebase/auth";
 
-import { EProvider, InvalidAppError } from "@eoussama/firemitt";
+import { EProvider, InvalidAppError, InvalidProviderError } from "@eoussama/firemitt";
 import { deleteApp, initializeApp } from "firebase/app";
 import {
+  browserPopupRedirectResolver,
   FacebookAuthProvider,
-  getAuth,
   GithubAuthProvider,
   GoogleAuthProvider,
+  initializeAuth,
+  inMemoryPersistence,
   OAuthProvider,
   SAMLAuthProvider,
   TwitterAuthProvider,
 } from "firebase/auth";
 
-import { CacheHelper } from "./cache.helper";
+import { CacheHelper } from "./cache.helper.ts";
 
 
+
+/**
+ * @description
+ * Firebase provider identifiers accepted as aliases of the built-in providers.
+ */
+const PROVIDER_ALIASES: Record<string, string> = {
+  "google.com": EProvider.GOOGLE,
+  "github.com": EProvider.GITHUB,
+  "facebook.com": EProvider.FACEBOOK,
+  "twitter.com": EProvider.TWITTER,
+  "microsoft.com": EProvider.MICROSOFT,
+  "apple.com": EProvider.APPLE,
+  "yahoo.com": EProvider.YAHOO,
+};
 
 /**
  * @description
@@ -38,65 +54,100 @@ export class FirebaseHelper {
 
   /**
    * @description
-   * Retrieves or initializes a Firebase app based on provided configuration.
+   * Returns the cache key of a Firebase configuration (older Firemitt versions may not send an app ID).
    *
    * @param credentials The Firebase configuration.
-   * @returns The Firebase app instance if available, otherwise null.
+   * @returns The cache key.
    */
-  private static getApp(credentials: TFirebaseConfig): TNullable<FirebaseApp> {
-    if (!this.apps.has(credentials.appId)) {
-      const app = initializeApp(credentials as unknown as FirebaseOptions);
-
-      this.apps.set(credentials.appId, app);
-    }
-
-    return this.apps.get(credentials.appId);
+  private static getKey(credentials: TFirebaseConfig): string {
+    return credentials.appId || credentials.apiKey;
   }
 
   /**
    * @description
-   * Deletes the Firebase app instance and clears the cache for the given app ID.
-   * Call this before retrying sign-in to ensure no stale auth state carries over.
+   * Retrieves or initializes a Firebase app based on provided configuration.
    *
-   * @param appId The Firebase app ID to reset.
-   * @returns A promise that resolves when the app has been deleted and cache cleared.
+   * @param credentials The Firebase configuration.
+   * @returns The Firebase app instance.
    */
-  static async reset(appId: string): Promise<void> {
-    const app = this.apps.get(appId);
+  private static getApp(credentials: TFirebaseConfig): FirebaseApp {
+    const key = this.getKey(credentials);
+    let app = this.apps.get(key);
 
-    if (app) {
-      await deleteApp(app).catch(() => {});
+    if (!app) {
+      app = initializeApp(credentials as FirebaseOptions);
+      this.apps.set(key, app);
     }
 
-    this.apps.delete(appId);
-    this.auths.delete(appId);
+    return app;
+  }
+
+  /**
+   * @description
+   * Deletes every Firebase app instance and clears the caches.
+   * Called before each sign-in attempt so that no stale app or auth state carries over.
+   *
+   * @returns A promise that resolves when the apps have been deleted and the caches cleared.
+   */
+  static async reset(): Promise<void> {
+    await Promise.all(this.apps.values().map(app => deleteApp(app).catch(() => {})));
+
+    this.apps.clear();
+    this.auths.clear();
   }
 
   /**
    * @description
    * Retrieves the Firebase auth instance associated with a Firebase app.
+   * The auth state is only kept in memory, so no session outlives the Fireguard window.
    *
    * @param credentials The Firebase configuration.
-   * @returns The Firebase auth instance if available, otherwise null.
-   * @throws {InvalidAppError} If the Firebase app is invalid or not initialized.
+   * @returns The Firebase auth instance.
+   * @throws {InvalidAppError} If the Firebase app or its auth instance cannot be initialized.
    */
-  static getAuth(credentials: TFirebaseConfig): TNullable<Auth> {
-    try {
-      if (!this.auths.has(credentials.appId)) {
-        const app = this.getApp(credentials);
+  static getAuth(credentials: TFirebaseConfig): Auth {
+    const key = this.getKey(credentials);
+    let auth = this.auths.get(key);
 
-        if (app) {
-          const auth = getAuth(app);
-
-          this.auths.set(credentials.appId, auth);
-        }
+    if (!auth) {
+      try {
+        auth = initializeAuth(this.getApp(credentials), {
+          persistence: inMemoryPersistence,
+          popupRedirectResolver: browserPopupRedirectResolver,
+        });
+      }
+      catch {
+        throw new InvalidAppError();
       }
 
-      return this.auths.get(credentials.appId);
+      this.auths.set(key, auth);
     }
-    catch {
-      throw new InvalidAppError();
+
+    return auth;
+  }
+
+  /**
+   * @description
+   * Normalizes a provider identifier: values are trimmed, built-in providers and their Firebase identifiers
+   * (e.g. "github.com") are matched case-insensitively, custom "oidc.<id>" / "saml.<id>" identifiers keep their case-sensitive id,
+   * and empty values default to "google".
+   *
+   * @param providerId The provider identifier.
+   * @returns The normalized provider identifier.
+   */
+  static normalizeProvider(providerId: TUnsafe<string>): string {
+    const trimmed = (providerId ?? "").trim();
+    const lower = trimmed.toLowerCase();
+
+    if (!trimmed) {
+      return EProvider.GOOGLE;
     }
+
+    if (lower.startsWith("oidc.") || lower.startsWith("saml.")) {
+      return lower.slice(0, 5) + trimmed.slice(5);
+    }
+
+    return PROVIDER_ALIASES[lower] ?? lower;
   }
 
   /**
@@ -107,19 +158,28 @@ export class FirebaseHelper {
    *
    * @param providerId The provider identifier. Defaults to "google".
    * @returns The AuthProvider instance for the given provider.
+   * @throws {InvalidProviderError} If the provider identifier is unknown.
    */
-  static getProvider(providerId: string = EProvider.GOOGLE): AuthProvider {
-    if (providerId.startsWith("saml.")) {
-      return new SAMLAuthProvider(providerId);
+  static getProvider(providerId: TUnsafe<string> = EProvider.GOOGLE): AuthProvider {
+    const id = this.normalizeProvider(providerId);
+
+    if (id.startsWith("saml.")) {
+      return new SAMLAuthProvider(id);
     }
 
-    if (providerId.startsWith("oidc.") || providerId === EProvider.MICROSOFT) {
-      const oidcId = providerId === EProvider.MICROSOFT ? "microsoft.com" : providerId;
-
-      return new OAuthProvider(oidcId);
+    if (id.startsWith("oidc.")) {
+      return new OAuthProvider(id);
     }
 
-    switch (providerId) {
+    switch (id) {
+      case EProvider.GOOGLE: {
+        const google = new GoogleAuthProvider();
+
+        google.setCustomParameters({ prompt: "select_account" });
+
+        return google;
+      }
+
       case EProvider.GITHUB:
         return new GithubAuthProvider();
 
@@ -129,19 +189,17 @@ export class FirebaseHelper {
       case EProvider.TWITTER:
         return new TwitterAuthProvider();
 
+      case EProvider.MICROSOFT:
+        return new OAuthProvider("microsoft.com");
+
       case EProvider.APPLE:
         return new OAuthProvider("apple.com");
 
       case EProvider.YAHOO:
         return new OAuthProvider("yahoo.com");
 
-      default: {
-        const google = new GoogleAuthProvider();
-
-        google.setCustomParameters({ prompt: "select_account" });
-
-        return google;
-      }
+      default:
+        throw new InvalidProviderError(id);
     }
   }
 }

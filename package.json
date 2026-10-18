@@ -1,41 +1,66 @@
 {
   "name": "fireguard",
   "type": "module",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
-  "packageManager": "pnpm@11.9.0",
+  "packageManager": "pnpm@12.14.0",
+  "description": "Firebase middleman authenticator for Chrome extensions (Manifest V3) and web apps.",
+  "author": {
+    "name": "eoussama",
+    "url": "https://ouss.es",
+    "email": "oussama.essamadi@gmail.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://ouss.es/fireguard",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eoussama/fireguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eoussama/fireguard/issues"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "typecheck:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "mutation": "stryker run",
     "lint": "dx lint",
     "lint:fix": "dx lint --fix",
-    "prod": "pnpm audit && pnpm lint && pnpm check && pnpm build && pnpm test"
+    "check": "pnpm audit && pnpm lint && pnpm typecheck && pnpm coverage && pnpm mutation && pnpm build"
   },
   "dependencies": {
-    "@eoussama/core": "^0.0.4",
-    "@eoussama/firemitt": "^0.1.8",
+    "@eoussama/core": "^0.1.2",
+    "@eoussama/firemitt": "^0.1.9",
     "chroma-js": "^3.2.0",
-    "firebase": "^12.15.0"
+    "firebase": "^13.0.0"
   },
   "devDependencies": {
-    "@eoussama/dx": "^0.0.4",
-    "@sveltejs/adapter-auto": "^7.0.1",
-    "@sveltejs/adapter-static": "^3.0.10",
-    "@sveltejs/kit": "^2.68.0",
-    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@eoussama/dx": "^0.1.3",
+    "@stryker-mutator/core": "^10.0.0",
+    "@sveltejs/adapter-static": "^4.0.0",
+    "@sveltejs/kit": "^3.1.0",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@types/chroma-js": "^3.1.2",
-    "eslint": "^9.39.4",
-    "eslint-plugin-svelte": "^3.20.0",
-    "sass": "^1.69.7",
-    "svelte": "^5.55.7",
-    "svelte-check": "^4.0.0",
-    "tslib": "^2.4.1",
-    "typescript": "^6.0.3",
-    "vite": "^8.1.0",
-    "vitest": "^4.1.9"
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "eslint": "^10.13.0",
+    "eslint-plugin-svelte": "^3.23.1",
+    "sass": "^1.105.2",
+    "svelte": "^5.57.2",
+    "svelte-check": "^4.7.7",
+    "svelte-eslint-parser": "^1.9.0",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
   }
 }

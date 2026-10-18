@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
 
-  import Foot from "$lib/components/foot.svelte";
+  import Foot from "#lib/components/foot.svelte";
+  import { appStore } from "#lib/core/stores/app.store.ts";
   import "../theme/main.scss";
 
 
@@ -10,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>Fireguard</title>
+  <title>{$appStore.config?.name ? `Sign in to ${$appStore.config.name} · Fireguard` : "Fireguard"}</title>
 </svelte:head>
 
 <div class="root">

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { CacheHelper } from "./cache.helper";
+import { CacheHelper } from "./cache.helper.ts";
 
 
 
@@ -9,6 +9,35 @@ describe("tests CacheHelper", () => {
 
   beforeEach(() => {
     cache = new CacheHelper<string>();
+  });
+
+  describe("edge cases", () => {
+    it("stores falsy values", () => {
+      const numbers = new CacheHelper<number>();
+
+      expect(numbers.set("zero", 0)).toBe(true);
+      expect(numbers.has("zero")).toBe(true);
+      expect(numbers.set("zero", 1)).toBe(false);
+      expect(numbers.get("zero")).toBe(0);
+    });
+
+    it("does not treat prototype keys as cached", () => {
+      expect(cache.has("toString")).toBe(false);
+      expect(cache.has("__proto__")).toBe(false);
+      expect(cache.set("__proto__", "value")).toBe(true);
+      expect(cache.get("__proto__")).toBe("value");
+    });
+
+    it("lists and clears values", () => {
+      cache.set("a", "1");
+      cache.set("b", "2");
+
+      expect(cache.values()).toEqual(["1", "2"]);
+
+      cache.clear();
+
+      expect(cache.values()).toEqual([]);
+    });
   });
 
   describe("set", () => {

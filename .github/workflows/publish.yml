@@ -4,8 +4,12 @@ on:
   release:
     types: [published]
 
-env:
-  PUBLIC_VERSION: ${{ vars.PUBLIC_VERSION }}
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   publish:
@@ -14,22 +18,23 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: 22.x
-          registry-url: "https://registry.npmjs.org/"
+          node-version: 24.x
+          cache: pnpm
 
       - name: Install Dependencies
-        run: |
-          corepack enable
-          pnpm install
-        env:
-          CI: true
+        run: pnpm install --frozen-lockfile
 
-      - name: Build Project
-        run: pnpm build
+      - name: Check and build (audit, lint, type-check, coverage, mutation testing, build)
+        run: pnpm check
 
       - name: Deploy on Github Pages
         uses: peaceiris/actions-gh-pages@v4

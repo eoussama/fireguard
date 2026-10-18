@@ -1,4 +1,4 @@
-import type { TNullable } from "@eoussama/core";
+import type { TUnsafe } from "@eoussama/core";
 
 
 
@@ -11,21 +11,21 @@ import type { TNullable } from "@eoussama/core";
 export class CacheHelper<T> {
   /**
    * @description
-   * Caching object.
+   * Caching map.
    */
-  private cache: { [key: string]: T };
+  private cache: Map<string, T>;
 
   /**
    * @description
    * Constructs a new instance of CacheHelper.
    */
   constructor() {
-    this.cache = {};
+    this.cache = new Map();
   }
 
   /**
    * @description
-   * Sets a value in the cache.
+   * Sets a value in the cache, without overwriting an existing one.
    *
    * @param key The key under which the value is stored.
    * @param value The value to be stored.
@@ -33,7 +33,7 @@ export class CacheHelper<T> {
    */
   set(key: string, value: T): boolean {
     if (!this.has(key)) {
-      this.cache[key] = value;
+      this.cache.set(key, value);
 
       return true;
     }
@@ -46,10 +46,10 @@ export class CacheHelper<T> {
    * Retrieves a value from the cache.
    *
    * @param key The key of the value to retrieve.
-   * @returns Returns the value associated with the key, or null if the key does not exist.
+   * @returns Returns the value associated with the key, or undefined if the key does not exist.
    */
-  get(key: string): TNullable<T> {
-    return this.cache[key];
+  get(key: string): TUnsafe<T> {
+    return this.cache.get(key);
   }
 
   /**
@@ -60,7 +60,7 @@ export class CacheHelper<T> {
    * @returns Returns true if the key exists in the cache, otherwise false.
    */
   has(key: string): boolean {
-    return Boolean(this.get(key));
+    return this.cache.has(key);
   }
 
   /**
@@ -71,12 +71,24 @@ export class CacheHelper<T> {
    * @returns Returns true if the value was successfully deleted, otherwise false.
    */
   delete(key: string): boolean {
-    if (this.has(key)) {
-      delete this.cache[key];
+    return this.cache.delete(key);
+  }
 
-      return true;
-    }
+  /**
+   * @description
+   * Returns all the cached values.
+   *
+   * @returns The cached values.
+   */
+  values(): Array<T> {
+    return [...this.cache.values()];
+  }
 
-    return false;
+  /**
+   * @description
+   * Removes every value from the cache.
+   */
+  clear(): void {
+    this.cache.clear();
   }
 }

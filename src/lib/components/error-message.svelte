@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { appStore } from "$lib/core/stores/app.store";
+  import { appStore } from "#lib/core/stores/app.store.ts";
 </script>
 
-<div class="error">{$appStore.errorMsg}</div>
+<div class="error" role="alert">{$appStore.errorMsg}</div>
 
 <style lang="scss">
   .error {

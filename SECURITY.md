@@ -1,13 +1,19 @@
 # Security Policy
 
+## Supported Versions
+
+Only the latest release of Fireguard (the version deployed at https://ouss.es/fireguard/) receives security fixes.
+
 ## Reporting a Vulnerability
 
-Vulnerabilities can be reported on the [Issues](https://github.com/eoussama/fireguard/issues) tab.
+Please **do not** report security vulnerabilities through public GitHub issues.
 
-Please follow these steps to report a security vulnerability:
+Instead, report them privately through [GitHub Security Advisories](https://github.com/eoussama/fireguard/security/advisories/new), or by email to [oussama.essamadi@gmail.com](mailto:oussama.essamadi@gmail.com).
 
-1. Go to the [Issues](https://github.com/eoussama/fireguard/issues) tab.
+Please include as much detail as possible:
 
-2. Click on the "New Issue" button.
+1. A clear description of the vulnerability and its impact.
+2. The affected version(s) or deployment.
+3. Steps to reproduce it, or a proof of concept.
 
-3. Fill out the form with as much detail as possible, including a clear description of the vulnerability and any steps to reproduce it.
+You will receive an acknowledgement as soon as possible, and a fix will be released once the issue is confirmed.

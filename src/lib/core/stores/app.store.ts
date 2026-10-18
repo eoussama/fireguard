@@ -1,9 +1,9 @@
 import type { TFireguardConfig } from "@eoussama/firemitt";
-import type { TAppStore } from "../types/app-store.type";
+import type { TAppError, TAppStore } from "../types/app-store.type.ts";
 
 import { writable } from "svelte/store";
 
-import { initialAppState } from "../consts/app-store.const";
+import { initialAppState } from "../consts/app-store.const.ts";
 
 
 
@@ -26,7 +26,14 @@ export const appStore: TAppStore = (() => {
     clearToken: () => update(state => ({ ...state, token: null })),
     registerToken: (token: string) => update(state => ({ ...state, token })),
 
-    clearError: () => update(state => ({ ...state, errorMsg: null })),
-    raiseError: (errorMsg: string) => update(state => ({ ...state, errorMsg })),
+    clearError: () => update(state => ({ ...state, errorMsg: null, error: null, retryable: false })),
+    raiseError: (errorMsg: string, details?: TAppError) => update(state => ({
+      ...state,
+      errorMsg,
+      error: details?.error ?? null,
+      retryable: details?.retryable ?? false,
+    })),
+
+    markReported: () => update(state => ({ ...state, reported: true })),
   };
 })();

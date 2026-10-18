@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { AuthStatus } from "$lib/core/enums/auth-status.enum";
-  import { appStore } from "$lib/core/stores/app.store";
+  import { asset } from "$app/paths";
   import { EnumHelper } from "@eoussama/firemitt";
-  import { fly } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
+  import { AuthStatus } from "#lib/core/enums/auth-status.enum.ts";
+  import { appStore } from "#lib/core/stores/app.store.ts";
 
 
 
@@ -20,36 +21,49 @@
 
   /**
    * @description
-   * Returns the appropriate status icon.
-   *
-   * @returns The icon path for the current status.
+   * The logo of the application, if any.
    */
-  const getLoaderIcon = (): string => `images/${statusName}.svg`;
+  const logo = $derived($appStore.config?.logo);
 
   /**
    * @description
-   * Returns the appropriate classes for the icon element.
-   *
-   * @returns The CSS class string for the loader icon.
+   * The icon of each status.
    */
-  const getLoaderClass = (): string =>
-    ["head__icon", "head__icon--loader", `head__icon--${statusName}`].join(" ");
+  const icons = {
+    [AuthStatus.Pending]: asset("images/pending.svg"),
+    [AuthStatus.Success]: asset("images/success.svg"),
+    [AuthStatus.Failure]: asset("images/failure.svg"),
+  };
 </script>
 
+{#snippet statusIcon()}
+  <div class="status status--{statusName}">
+    {#if status === AuthStatus.Pending}
+      <div class="status__ring"></div>
+    {/if}
+    <img alt={`Status: ${statusName}`} src={icons[status]} />
+  </div>
+{/snippet}
+
 <div class="head">
-  {#if $appStore.config?.logo}
+  {#if logo}
     <div class="head__icon head__icon--config" transition:fly>
-      <img alt="App Icon" src={$appStore.config.logo} />
+      <img alt={`${$appStore.config?.name} logo`} src={logo} referrerpolicy="no-referrer" />
     </div>
 
-    <div class={getLoaderClass()} transition:fly>
-      <div class="loader"></div>
-      <img alt="Status icon" src={getLoaderIcon()} />
+    <div class="head__status" transition:fly>
+      {@render statusIcon()}
     </div>
   {/if}
 
-  <div class="head__icon head__icon--fireguard">
-    <img alt="Fireguard Icon" src="./images/logo.svg" />
+  <div class="head__icon head__icon--fireguard" class:head__icon--muted={!logo}>
+    <img class="head__fireguard" alt="Fireguard logo" src={asset("images/logo.svg")} />
+
+    {#if !logo}
+      <div class="head__overlay" transition:fade>
+        {@render statusIcon()}
+      </div>
+    {/if}
   </div>
 </div>
 
@@ -78,84 +92,106 @@
       }
 
       &--fireguard {
+        position: relative;
         border-radius: 50%;
         margin-inline: 20px;
         background-color: rgba(var(--color-primary-rgb), 0.4);
+        transition: background-color 0.6s ease;
       }
 
-      &--loader {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      &--muted {
+        background-color: rgba(var(--color-primary-rgb), 0.15);
 
-        width: 35px;
-        position: relative;
+        .head__fireguard {
+          opacity: 0.2;
+        }
+      }
+    }
+
+    &__fireguard {
+      transition: opacity 0.6s ease;
+    }
+
+    &__status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    &__overlay {
+      position: absolute;
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .status {
+        width: 52px;
+        height: 52px;
 
         img {
-          max-width: 35px;
+          width: 38px;
         }
 
-        .loader {
-          display: none;
-          align-items: center;
-          justify-content: center;
-
-          width: 40px;
-          height: 40px;
-          padding: 4px;
-
-          aspect-ratio: 1;
-
-          border-radius: 50%;
-          background: var(--color-secondary);
-
-          --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
-          mask: var(--_m);
-
-          -webkit-mask: var(--_m);
-          -webkit-mask-composite: source-out;
-
-          mask-composite: subtract;
-          animation: load 1s infinite linear;
-
-          @keyframes load {
-            to {
-              transform: rotate(1turn);
-            }
-          }
+        &--pending img {
+          width: 26px;
         }
       }
+    }
+  }
 
-      &--pending {
-        img {
-          position: absolute;
-          top: 50%;
-          left: 0;
+  .status {
+    position: relative;
 
-          transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-          animation-name: beat;
-          animation-duration: 1s;
-          animation-fill-mode: both;
-          animation-direction: alternate;
-          animation-iteration-count: infinite;
-          animation-timing-function: ease-in-out;
+    width: 44px;
+    height: 44px;
 
-          @keyframes beat {
-            from {
-              opacity: 0.3;
-            }
+    img {
+      width: 30px;
+    }
 
-            to {
-              opacity: 1;
-            }
-          }
-        }
+    &__ring {
+      position: absolute;
+      inset: 0;
 
-        .loader {
-          display: flex;
-        }
-      }
+      padding: 4px;
+      border-radius: 50%;
+      background: var(--color-secondary);
+
+      --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+      mask: var(--_m);
+
+      -webkit-mask: var(--_m);
+      -webkit-mask-composite: source-out;
+
+      mask-composite: subtract;
+      animation: spin 1s infinite linear;
+    }
+
+    &--pending img {
+      width: 22px;
+      animation: beat 1s ease-in-out infinite alternate both;
+    }
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  @keyframes beat {
+    from {
+      opacity: 0.3;
+    }
+
+    to {
+      opacity: 1;
     }
   }
 </style>

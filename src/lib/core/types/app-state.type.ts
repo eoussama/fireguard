@@ -1,5 +1,5 @@
 import type { TNullable } from "@eoussama/core";
-import type { TFireguardConfig } from "@eoussama/firemitt";
+import type { IError, TFireguardConfig } from "@eoussama/firemitt";
 
 
 
@@ -25,6 +25,24 @@ export type TAppState = {
    * Error message if any. Can be null.
    */
   errorMsg: TNullable<string>;
+
+  /**
+   * @description
+   * The serialized error of the last failed authentication attempt, if any.
+   */
+  error: TNullable<IError>;
+
+  /**
+   * @description
+   * Whether the last failed authentication attempt can be retried in place.
+   */
+  retryable: boolean;
+
+  /**
+   * @description
+   * Whether the result was already reported to the host page.
+   */
+  reported: boolean;
 
   /**
    * @description

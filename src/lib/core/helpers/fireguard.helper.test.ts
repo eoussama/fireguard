@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { FireguardHelper } from "./fireguard.helper";
+import { FireguardHelper } from "./fireguard.helper.ts";
 
 
 

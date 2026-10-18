@@ -3,32 +3,39 @@
 
 
 
-  /**
-   * @description
-   * If the button is primary
-   */
-
-  /**
-   * @description
-   * The label of the button
-   */
-
-  /**
-   * @description
-   * Click handler callback
-   */
   const {
     primary = false,
+    disabled = false,
     label = "Click Me!",
     onclick,
   }: {
+    /**
+     * @description
+     * If the button is primary
+     */
     primary?: boolean;
+
+    /**
+     * @description
+     * If the button is disabled
+     */
+    disabled?: boolean;
+
+    /**
+     * @description
+     * The label of the button
+     */
     label?: string;
+
+    /**
+     * @description
+     * Click handler callback
+     */
     onclick?: MouseEventHandler<HTMLButtonElement>;
   } = $props();
 </script>
 
-<button class="btn" class:btn--primary={primary} {onclick}>{label}</button>
+<button type="button" class="btn" class:btn--primary={primary} {disabled} {onclick}>{label}</button>
 
 <style lang="scss">
   .btn {
@@ -42,11 +49,16 @@
     transition-property: background-color;
 
     color: var(--color-text);
-    font-family: var(--font-primary);
+    font-family: var(--font-family-primary);
     background-color: rgba(var(--color-primary-rgb), 0.2);
 
     &:hover {
       background-color: rgba(var(--color-primary-rgb), 0.4);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
     }
 
     &--primary {

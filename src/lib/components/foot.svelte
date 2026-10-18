@@ -1,19 +1,23 @@
 <script lang="ts">
-  import { PUBLIC_VERSION } from "$env/static/public";
+  /**
+   * @description
+   * The version of Fireguard, read from its package.json at build time.
+   */
+  const version = __FIREGUARD_VERSION__;
 </script>
 
 <div class="foot">
   <p class="foot__note">Make sure you're not blocking popups on this page.</p>
   <p class="foot__note">
-    Powered by <a target="_blank" href="https://github.com/eoussama/fireguard">Fireguard</a>
-    v{PUBLIC_VERSION}
+    Powered by <a target="_blank" rel="noopener noreferrer" href="https://github.com/eoussama/fireguard">Fireguard</a>
+    v{version}
   </p>
 </div>
 
 <style lang="scss">
   .foot {
     &__note {
-      color: grey;
+      color: #5f6b72;
       font-size: 12px;
     }
 
