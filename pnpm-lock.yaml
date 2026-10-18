@@ -163,7 +163,6 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  '@eoussama/firemitt': link:../firemitt
   '@firebase/firestore>@grpc/grpc-js': ^1.13.6
   micromark-extension-math>katex: ^0.18.2
   typed-rest-client>qs: ^6.16.0
@@ -176,8 +175,8 @@ importers:
         specifier: ^0.1.2
         version: 0.1.2
       '@eoussama/firemitt':
-        specifier: link:../firemitt
-        version: link:../firemitt
+        specifier: ^0.1.9
+        version: 0.1.9
       chroma-js:
         specifier: ^3.2.0
         version: 3.2.0
@@ -565,6 +564,10 @@ packages:
         optional: true
       svelte-eslint-parser:
         optional: true
+
+  '@eoussama/firemitt@0.1.9':
+    resolution: {integrity: sha512-1nRdQfX1ijbZ6tAJW0dywglEP501uu5Py6G5GoevJt5Ae9E5dDkLp7Tx1Gr9dYKM1sRzzZ2xgkZdFZkXK6r/Cw==}
+    engines: {node: '>=24'}
 
   '@es-joy/jsdoccomment@0.92.0':
     resolution: {integrity: sha512-WivZqV5jPTYDQJgIMp0hTsyQESKYNY6yCJr4b0l84tYtQntkAMkc6zARh2vlRQyeg4aYHPUkCUDpvr2IWAiGpQ==}
@@ -3814,6 +3817,11 @@ snapshots:
       - ts-declaration-location
       - typescript
       - vitest
+
+  '@eoussama/firemitt@0.1.9':
+    dependencies:
+      '@eoussama/core': 0.1.2
+      zod: 4.6.7
 
   '@es-joy/jsdoccomment@0.92.0':
     dependencies:
